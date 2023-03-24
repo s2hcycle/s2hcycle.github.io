@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品价格计算器</title>
+    <style>
+        input, button {font-size: 16px;}
+    </style>
+</head>
+<body>
+    <h1>商品价格计算器</h1>
+    <p>
+        <label for="cost_price">成本价:</label>
+        <input type="number" id="cost_price" placeholder="输入成本价">
+    </p>
+    <p>
+        <label for="order_amount">订单金额:</label>
+        <input type="number" id="order_amount" placeholder="输入订单金额">
+    </p>
+    <button onclick="calculateRetailPrice()">计算零售价</button>
+    <p id="result"></p>
+    
+    <script>
+        function calculateRetailPrice() {
+            const costPrice = parseFloat(document.getElementById("cost_price").value);
+            const orderAmount = parseFloat(document.getElementById("order_amount").value);
+
+            let discountRate, grossMarginRate;
+
+            if (orderAmount <= 5000) {
+                discountRate = 0.3;
+            } else if (orderAmount > 5000 && orderAmount <= 30000) {
+                discountRate = 0.33;
+            } else if (orderAmount > 30000 && orderAmount <= 100000) {
+                discountRate = 0.36;
+            } else if (orderAmount > 100000 && orderAmount <= 200000) {
+                discountRate = 0.4;
+            } else {
+                discountRate = 0.45;
+            }
+
+            if (costPrice < 1000) {
+                grossMarginRate = 0.45;
+            } else if (costPrice >= 1000 && costPrice < 3000) {
+                grossMarginRate = 0.4;
+            } else {
+                grossMarginRate = 0.35;
+            }
+
+            const retailPrice = costPrice / (1 - discountRate) * (1 - grossMarginRate);
+            document.getElementById("result").innerHTML = `零售价: ${retailPrice.toFixed(2)} 元`;
+        }
+    </script>
+</body>
+</html>
