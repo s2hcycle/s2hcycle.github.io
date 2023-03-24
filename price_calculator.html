@@ -19,6 +19,14 @@
         <label for="order_amount">订单金额:</label>
         <input type="number" id="order_amount" placeholder="输入订单金额">
     </p>
+    <p>
+        <label for="discount_rates">折扣率 (用逗号分隔):</label>
+        <input type="text" id="discount_rates" value="30,33,36,40,45">
+    </p>
+    <p>
+        <label for="gross_margin_rates">毛利率 (用逗号分隔):</label>
+        <input type="text" id="gross_margin_rates" value="45,40,35">
+    </p>
     <button onclick="calculateRetailPrice()">计算零售价</button>
     <p id="result"></p>
     
@@ -26,27 +34,29 @@
         function calculateRetailPrice() {
             const costPrice = parseFloat(document.getElementById("cost_price").value);
             const orderAmount = parseFloat(document.getElementById("order_amount").value);
+            const discountRates = document.getElementById("discount_rates").value.split(',').map(Number).map(x => x / 100);
+            const grossMarginRates = document.getElementById("gross_margin_rates").value.split(',').map(Number).map(x => x / 100);
 
             let discountRate, grossMarginRate;
 
             if (orderAmount <= 5000) {
-                discountRate = 0.3;
+                discountRate = discountRates[0];
             } else if (orderAmount > 5000 && orderAmount <= 30000) {
-                discountRate = 0.33;
+                discountRate = discountRates[1];
             } else if (orderAmount > 30000 && orderAmount <= 100000) {
-                discountRate = 0.36;
+                discountRate = discountRates[2];
             } else if (orderAmount > 100000 && orderAmount <= 200000) {
-                discountRate = 0.4;
+                discountRate = discountRates[3];
             } else {
-                discountRate = 0.45;
+                discountRate = discountRates[4];
             }
 
             if (costPrice < 1000) {
-                grossMarginRate = 0.45;
+                grossMarginRate = grossMarginRates[0];
             } else if (costPrice >= 1000 && costPrice < 3000) {
-                grossMarginRate = 0.4;
+                grossMarginRate = grossMarginRates[1];
             } else {
-                grossMarginRate = 0.35;
+                grossMarginRate = grossMarginRates[2];
             }
 
             const retailPrice = costPrice / (1 - discountRate) * (1 - grossMarginRate);
